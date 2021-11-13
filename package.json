@@ -4,15 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "npx forever start -m 1 app/src/index.js",
+    "stop": "npx forever stop app/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^16.11.7",
     "fast-average-color": "^7.0.1",
+    "forever": "^4.0.1",
     "image-pixels": "^2.2.2",
-    "screenshot-desktop": "^1.12.7"
+    "screenshot-desktop": "^1.12.7",
+    "typescript": "^4.4.4"
   }
 }

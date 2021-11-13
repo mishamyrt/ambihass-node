@@ -1,17 +1,6 @@
 [
     {
-        "entityId": "light.screen_bar_back",
-        "brightness": 1,
-        "position": 0.01
-    },
-    {
         "entityId": "light.screen_back_middle",
-        "brightness": 0.7,
-        "position": 0.6
-    },
-    {
-        "entityId": "light.desk_backlight",
-        "brightness": 0.5,
-        "position": 0.99
+        "brightness": 1
     }
 ]
