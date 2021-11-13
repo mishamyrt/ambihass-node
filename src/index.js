@@ -21,7 +21,7 @@ async function main() {
     let lastFrame = 0
     while (true) {
         const frame = await screenshot({ screen: 1 })
-        await handleFrame(frame)
+        handleFrame(frame)
         const now = Date.now()
         const time = (now - lastFrame) / 1000
         lastFrame = now
