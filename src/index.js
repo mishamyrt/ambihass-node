@@ -1,30 +1,27 @@
 const screenshot = require('screenshot-desktop')
 const pixels = require('image-pixels')
 const { sliceImage, getRGB } = require('./modules/image')
-const { token, host } = require('../env.json')
 const { createColorist } = require('./modules/hass')
+const { token, host } = require('../env.json')
+const lamps = require('../lamps.json')
 
 const writeColor = createColorist(token, host)
 
-const handleFrame = () => screenshot({ screen: 1 })
-    .then(pixels)
-    .then(image => [
-        sliceImage(image, 0.01),
-        sliceImage(image, 0.6),
-        sliceImage(image, 0.99),
-    ])
+const applyColor = (lamp, color) => 
+    color.then(c => writeColor(lamp.entityId, c, lamp.brightness))
+
+
+const handleFrame = (frame) => pixels(frame)
+    .then(image => lamps.map(lamp => sliceImage(image, lamp.position)))
     .then(slices => slices.map(getRGB))
-    .then(slices => {
-        slices[0].then(c => writeColor('light.screen_bar_back', c, 1))
-        slices[1].then(c => writeColor('light.screen_back_middle', c, 0.7))
-        slices[2].then(c => writeColor('light.desk_backlight', c, 0.5))
-    })
+    .then(colors => colors.map((color, i) => applyColor(lamps[i], color)))
     .catch(console.error)
 
 async function main() {
     let lastFrame = 0
     while (true) {
-        await handleFrame()
+        const frame = await screenshot({ screen: 1 })
+        await handleFrame(frame)
         const now = Date.now()
         const time = (now - lastFrame) / 1000
         lastFrame = now
