@@ -9,7 +9,7 @@ const writeColor = createColorist(token, host)
 const handleFrame = () => screenshot({ screen: 1 })
     .then(pixels)
     .then(image => [
-        sliceImage(image, 0.01,),
+        sliceImage(image, 0.01),
         sliceImage(image, 0.6),
         sliceImage(image, 0.99),
     ])
@@ -22,9 +22,13 @@ const handleFrame = () => screenshot({ screen: 1 })
     .catch(console.error)
 
 async function main() {
+    let lastFrame = 0
     while (true) {
         await handleFrame()
-        console.log(Date.now())
+        const now = Date.now()
+        const time = (now - lastFrame) / 1000
+        lastFrame = now
+        console.log(`Frame time: ${time}`)
     }
 }
 main()
